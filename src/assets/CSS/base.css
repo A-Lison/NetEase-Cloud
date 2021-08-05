@@ -1,0 +1,76 @@
+/* 取消内外边距 */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/* 取消字体加粗和斜体 */
+
+em,
+i {
+    font-style: normal
+}
+
+
+/* 取消li前的圆点 */
+
+li {
+    list-style: none
+}
+
+img {
+    /* 除去自带的边框 */
+    border: 0;
+    /* 消除图片底部空白缝隙 */
+    vertical-align: middle
+}
+
+
+/* 鼠标界面 */
+
+button {
+    cursor: pointer
+}
+
+a {
+    color: #666;
+    /* 取消下划线 */
+    text-decoration: none
+}
+
+a:hover {
+    color: #c81623
+}
+
+button,
+input {
+    font-family: Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif
+}
+
+body {
+    /* 消除锯齿，让文字显示更清晰 */
+    -webkit-font-smoothing: antialiased;
+    background-color: #fff;
+    font: 12px/1.5 Microsoft YaHei, Heiti SC, tahoma, arial, Hiragino Sans GB, "\5B8B\4F53", sans-serif;
+    color: #666
+}
+
+.hide,
+.none {
+    display: none
+}
+
+.clearfix:after {
+    visibility: hidden;
+    clear: both;
+    display: block;
+    content: ".";
+    height: 0
+}
+
+.clearfix {
+    *zoom: 1
+}
