@@ -6,7 +6,7 @@
           <a href="#">网易云音乐</a>
         </h1>
         <div class="top-main">
-          <div class="item item-1">发现音乐<slot slot="find"></slot></div>
+          <div class="item item-1">发现音乐<slot slot="find">1</slot></div>
           <div class="item item-2">我的音乐<slot slot="my">2</slot></div>
           <div class="item item-3">最近播放<slot slot="last">3</slot></div>
         </div>
@@ -38,7 +38,7 @@ export default {
 }
 .bottom {
   width: 100%;
-  height: 20px;
+  height: 33px;
   background-color: rgb(194, 12, 12);
 }
 .mtop {
@@ -51,8 +51,9 @@ export default {
   width: 176px;
   height: 69px;
   background-position: 0 0;
-  background: url(https://s2.music.126.net/style/web2/img/frame/topbar.png?e9bedca67b5a348d1dd253ffb0b46bd2)
-    no-repeat;
+  /* background: url(https://s2.music.126.net/style/web2/img/frame/topbar.png?e9bedca67b5a348d1dd253ffb0b46bd2)
+    no-repeat; */
+  background: url(../assets/img/logo.png) no-repeat;
 }
 .logo a {
   float: left;

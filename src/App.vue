@@ -2,6 +2,8 @@
   <div id="app">
     <!-- 顶部导航 -->
     <top-nav></top-nav>
+    <!-- 轮播展示 -->
+    <lun-bo></lun-bo>
     <!-- 总体布局容器 -->
     <!-- <div class="top">top</div>
     <div class="main">
@@ -17,13 +19,15 @@
 <script>
 import test from "./components/test.vue";
 import topNav from "./components/topNav.vue";
-// import show from "./components/show.vue";
+import lunBo from "./components/lunBo.vue";
+
 // new Vue().$mount("#app");
 export default {
   name: "App",
   components: {
     test,
     topNav,
+    lunBo,
   },
   computed: {
     height() {
