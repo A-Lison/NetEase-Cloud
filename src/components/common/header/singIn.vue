@@ -32,6 +32,8 @@ export default {
 <style lang="">
 .el-col-12 {
   width: 100px;
-  margin: 19px 40px;
+
+  position: absolute;
+  right: 15px;
 }
 </style>

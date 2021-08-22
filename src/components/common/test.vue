@@ -2,13 +2,14 @@
   <div class="anniu">
     <button class="post" @click="getRequest">发送</button>
     <div>返回的数据：{{ message }}</div>
+    <!-- <video src=""></video> -->
   </div>
 </template>
 
 <script>
 // import { request } from "../network/request";
-// import { axios } from "../network/axios";
-import axios from "axios";
+import axios from "../../network/axios";
+// import axios from "axios";
 
 export default {
   name: "test",
@@ -20,11 +21,20 @@ export default {
   methods: {
     getRequest() {
       axios({
-        url: "http://localhost:3000/playlist/hot",
+        url: "/video/url?id=FB7EFBDA499A834BD367434940AF3673",
+        // params: {
+        //   // keywords: "黄昏",
+        //   // type: 1014,
+        //   id: "FB7EFBDA499A834BD367434940AF3673",
+        //   // limit: 100,
+        //   // id: 190072,
+        // },
+        // url: "/api2/zixun/181654.html",
       })
         .then((res) => {
+          // console.log(res.data.klyric.lyric);
           console.log(res);
-          this.message = res.data.tags[0].name;
+          this.message = res.data;
         })
         .catch((err) => {
           this.message = err;

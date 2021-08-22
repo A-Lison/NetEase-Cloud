@@ -15,8 +15,8 @@
       height="200px"
       @change="getUrl"
     >
-      <el-carousel-item v-for="(item, index) in 6" :key="item">
-        <a href="#"
+      <el-carousel-item v-for="(item, index) in imgArr" :key="item">
+        <a hidefocus="true" href="https://music.163.com/song?id=1867243757"
           ><img
             class="medium"
             :src="imgArr[index]"
@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import axios from "../../network/axios";
 export default {
   name: "lunBo",
   data() {
@@ -46,21 +47,26 @@ export default {
         "https://p1.music.126.net/CPvZlCxjst9CLv_tFu04_A==/109951166251697817.jpg?imageView&quality=89",
     };
   },
+  created() {
+    axios({
+      url: "/banner",
+    })
+      .then((res) => {
+        for (let index = 0; res.data.banners[index]; index++) {
+          this.imgArr.splice(index, 1, res.data.banners[index].imageUrl);
+        }
+        // console.log("this.imgArr: " + this.imgArr);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  },
   methods: {
     getUrl(value) {
       this.coverImgUrl = this.imgArr[value];
     },
   },
-  // methods: {
-  //   change() {
-  //     this.coverImgUrl = imgArr[0];
-  //     // console.log(event.currentTarget.getAttribute("src"));
-  //     // this.coverImgUrl = event.currentTarget.getAttribute("src");
-  //   },
-  // },
 };
-// var imgPath = document.getElementsByClassName(".medium");
-// var coverImgUrl = imgPath.getAttribute("src");
 </script>
 
 <style scoped>
@@ -105,5 +111,11 @@ export default {
 }
 .medium {
   width: 100%;
+}
+</style>
+<style lang="">
+.lunbo {
+  position: relative;
+  z-index: 0;
 }
 </style>
