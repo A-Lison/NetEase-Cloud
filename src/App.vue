@@ -1,8 +1,10 @@
 <template>
   <div id="app">
-    <index-show v-if="isShow" :isShow.sync="isShow"></index-show>
-    <router-view name="index"></router-view>
+    <!-- <index-show v-if="isShow" :isShow.sync="isShow"></index-show> -->
+    <!-- <index-show v-if="isShow" @change-type="changeIsShow"></index-show> -->
+    <router-view></router-view>
 
+    <!-- <router-view name="index"></router-view> -->
     <!-- <index></index> -->
     <!-- <button @click="route">跳转</button> -->
     <!-- <test></test> -->
@@ -43,6 +45,14 @@ export default {
 
 <style>
 @import "assets/CSS/base.css";
+/* 隐藏页面滚动条 */
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0;
+}
 
 /* .top,
 .footer {

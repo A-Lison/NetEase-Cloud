@@ -10,7 +10,7 @@
       @current-change="handleCurrentChange"
       style="width: 100%"
     >
-      <el-table-column type="index" width="100"> </el-table-column>
+      <el-table-column type="index" width="100"></el-table-column>
       <el-table-column property="song" label="音乐标题" width="550">
       </el-table-column>
       <el-table-column property="singer" label="歌手" width="220">
@@ -43,14 +43,35 @@ export default {
       currentRow: null,
     };
   },
-  // computed: {
-  //   tableData() {
-  //     return this.$store.state.searchMusicList[0];
-  //   },
-  // },
+  created() {
+    this.viewSongList();
+  },
   watch: {
     // 改变播放列表的显示
     "$store.state.searchMusicList"() {
+      this.viewSongList();
+      // console.log(111111);
+      // console.log("cnt；" + this.$store.state.songCnt);
+      // console.log(222222);
+      // for (let index = 0; index < this.$store.state.songCnt; index++) {
+      //   this.$set(this.tableData, index, {
+      //     musicId: this.$store.state.searchMusicList[index].musicid,
+      //     song: this.$store.state.searchMusicList[index].song,
+      //     singer: this.$store.state.searchMusicList[index].singer,
+      //     zhuanji: this.$store.state.searchMusicList[index].zhuanji,
+      //     picUrl: this.$store.state.searchMusicList[index].picUrl,
+      //     time: this.$store.state.searchMusicList[index].time,
+      //   });
+      // }
+    },
+  },
+
+  methods: {
+    test() {
+      console.log(this.tableData);
+    },
+    //歌曲列表显示
+    viewSongList() {
       console.log(111111);
       console.log("cnt；" + this.$store.state.songCnt);
       console.log(222222);
@@ -64,12 +85,6 @@ export default {
           time: this.$store.state.searchMusicList[index].time,
         });
       }
-    },
-  },
-
-  methods: {
-    test() {
-      console.log(this.tableData);
     },
     setCurrent(row) {
       // console.log("musicId；" + songId);

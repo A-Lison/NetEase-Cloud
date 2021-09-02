@@ -8,6 +8,7 @@
         autoplay
         @timeupdate="timeupdate"
         @canplay="getDuration"
+        @ended="overAudio"
       ></audio>
 
       <el-slider
@@ -74,7 +75,7 @@
       <!-- 弹出播放歌曲列表 -->
 
       <div class="item item-3">
-        <button @click="test">test</button>
+        <!-- <button @click="test">test</button> -->
 
         <bo-fang-list></bo-fang-list>
       </div>
@@ -143,6 +144,9 @@ export default {
     "$refs.audio.play"() {
       this.$store.state.onPlay = true;
     },
+    // "$refs.audio.ended"() {
+    //   this.playStatus = false;
+    // },
     "$store.state.songId"() {
       this.playURL = this.$store.state.songId;
       this.picUrl = this.$store.state.playPicUrl;
@@ -154,16 +158,34 @@ export default {
       this.$store.state.onPlay = !this.$store.state.onPlay;
       this.playStatus = true;
     },
+    //监听路由是否在播放视频,播放视频时暂停播放歌曲
+    $route() {
+      if (this.$route.name === "onMv") {
+        // alert("123");
+        this.pause();
+      }
+    },
   },
   methods: {
     test() {
       console.log(this.$store.state.playList);
     },
+    //播放完毕执行
+    overAudio() {
+      // console.log('播放声音完毕');
+      // this.audioArr.forEach(item=>{
+      //     item.isStart = true;
+      // })
+      // this.$store.state.onPlay = false;
+      this.playStatus = false;
+    },
+
     // 获取歌曲URL
     getSongUrl(id) {
       this.$store.state.songId =
         "https://music.163.com/song/media/outer/url?" + "id=" + id + ".mp3";
     },
+    //播放上一首歌
     prev() {
       let t = this.playIndex - 1;
 
@@ -181,6 +203,7 @@ export default {
       console.log(this.$store.state.playList[0].playDetail[t].playSinger);
       console.log(this.$store.state.playSinger);
     },
+    //播放下一首歌
     next() {
       let f = this.playIndex + 1;
       this.$store.state.playSinger =
@@ -311,6 +334,10 @@ export default {
 </script>
 
 <style scoped>
+.xiayishou:hover,
+.shangyishou:hover {
+  color: #ef4444;
+}
 .time {
   margin-top: 15px;
   /* margin-right: 0px; */
@@ -348,8 +375,11 @@ export default {
 }
 .item-1 .singer {
   margin-left: 10px;
-  width: 60px;
-  height: 60px;
+  width: 50px;
+  height: 50px;
+
+  border-radius: 5px;
+  margin-top: 3px;
 }
 
 .shangyishou,

@@ -27,7 +27,9 @@ export default {
   },
   methods: {
     fanHui() {
-      this.$router.push("/videos");
+      // this.$router.push("/videos");
+      // 返回上一级路由
+      this.$router.go(-1);
     },
   },
 };

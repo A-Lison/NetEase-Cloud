@@ -34,12 +34,16 @@ VueRouter.prototype.push = function push(location) {
 // 2.创建路由对象
 const routes = [
   {
-    path: '',
-    redirect: ''
+    path: '/',
+    redirect: 'indexShow'
   },
   {
     path: '/indexShow',
     component: indexShow
+    // {
+    //   default: indexShow,
+    //   indexShow
+    // }
   },
   {
     path: '/index',
@@ -50,7 +54,11 @@ const routes = [
     },
     children:[
       {
-        path: '/discover',
+        path:'/index',
+        redirect:'discover'
+      },
+      {
+        path: '/index/discover',
         name:'discover',
         components: {
           default: discover,

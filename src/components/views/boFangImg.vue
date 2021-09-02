@@ -1,6 +1,6 @@
 <template>
   <div class="imgbox">
-    <img :src="playImg" alt="" />
+    <img :src="playImg" alt="" width="100%" />
   </div>
 </template>
 

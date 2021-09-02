@@ -117,7 +117,7 @@ export default {
   created() {
     if (this.$store.state.playSong === "") {
       alert("请选择歌曲播放");
-      this.$router.push("/discover");
+      this.$router.push("/index/discover");
     } else {
       // 音乐热评
       // /comment/hot?id=186016&type=0

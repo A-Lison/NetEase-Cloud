@@ -10,7 +10,7 @@
           router
           :default-active="defaultActive"
         >
-          <el-menu-item index="/discover">
+          <el-menu-item index="/index/discover">
             <i class="iconfont icon-yinle"></i>
             <span slot="title">发现音乐</span>
           </el-menu-item>
@@ -111,32 +111,32 @@ export default {
     // 请求
     // 请求用户歌单
     async getUserMusicList() {
-      if (!this.$store.state.isLogin) {
+      if (!this.$store.state.user.userName) {
         // 说明已经退出登录
         this.$message.error("请先进行登录操作");
         return;
       }
-      let timestamp = Date.parse(new Date());
-      // 先从localStorage里面读取用户信息  如果登录成功是有存的
-      this.userInfo =
-        window.localStorage.getItem("userInfo") &&
-        JSON.parse(window.localStorage.getItem("userInfo"));
-      let res = await this.$request("/user/playlist", {
-        uid: this.userInfo.userId,
-        timestamp,
-      });
+      // let timestamp = Date.parse(new Date());
+      // // 先从localStorage里面读取用户信息  如果登录成功是有存的
+      // this.userInfo =
+      //   window.localStorage.getItem("userInfo") &&
+      //   JSON.parse(window.localStorage.getItem("userInfo"));
+      // let res = await this.$request("/user/playlist", {
+      //   uid: this.userInfo.userId,
+      //   timestamp,
+      // });
       // console.log(res);
       // 对数据进行处理分类
-      res = res.data.playlist;
-      let index = res.findIndex((item) => item.subscribed == true);
-      this.createdMusicList = res.slice(0, index);
-      this.collectedMusicList = res.slice(index);
-      this.createdMusicList[0].name = "我喜欢的音乐";
-      // console.log(this.createdMusicList, this.collectedMusicList);
-      // 将收藏的歌单上传至vuex
-      this.$store.commit("updateCollectMusicList", this.collectedMusicList);
-      // 将创建的歌单上传至vuex
-      this.$store.commit("updateCreatedMusicList", this.createdMusicList);
+      // res = res.data.playlist;
+      // let index = res.findIndex((item) => item.subscribed == true);
+      // this.createdMusicList = res.slice(0, index);
+      // this.collectedMusicList = res.slice(index);
+      // this.createdMusicList[0].name = "我喜欢的音乐";
+      // // console.log(this.createdMusicList, this.collectedMusicList);
+      // // 将收藏的歌单上传至vuex
+      // this.$store.commit("updateCollectMusicList", this.collectedMusicList);
+      // // 将创建的歌单上传至vuex
+      // this.$store.commit("updateCreatedMusicList", this.createdMusicList);
     },
   },
   watch: {

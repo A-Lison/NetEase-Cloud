@@ -12,6 +12,7 @@
 </template>
 
 <script>
+import axios from "../../network/axios";
 import lyricsScroll from "./lyricsScroll";
 export default {
   name: "lyrics",
@@ -90,7 +91,13 @@ export default {
     //获取歌词信息，id为歌曲id
     getLyric(id) {
       let url = "https://api.imjad.cn/cloudmusic/?type=lyric&id=" + id; //获取歌词信息要设置type=lyric，详情看接口文档
-      axios(url)
+      // axios(url)
+      axios({
+        url: "/lyric",
+        params: {
+          id: id,
+        },
+      })
         .then(
           (res) => ((this.lyric = []), this.formatLyric(res.data.lrc.lyric))
         )

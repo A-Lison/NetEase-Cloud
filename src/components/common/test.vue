@@ -21,7 +21,7 @@ export default {
   methods: {
     getRequest() {
       axios({
-        url: "/video/url?id=FB7EFBDA499A834BD367434940AF3673",
+        url: "/lyric?id=33894312",
         // params: {
         //   // keywords: "黄昏",
         //   // type: 1014,
@@ -34,7 +34,7 @@ export default {
         .then((res) => {
           // console.log(res.data.klyric.lyric);
           console.log(res);
-          this.message = res.data;
+          this.message = res.data.lrc.lyric;
         })
         .catch((err) => {
           this.message = err;

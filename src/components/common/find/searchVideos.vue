@@ -103,7 +103,7 @@ export default {
   justify-content: left;
   width: 100%;
   height: auto;
-  padding-bottom: 25px;
+  padding-bottom: 35px;
 }
 .video {
   margin-right: 22px;

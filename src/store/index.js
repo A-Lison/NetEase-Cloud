@@ -16,7 +16,7 @@ const state = {
     // 当前播放歌单的id
     musicListId: '',
     // 是否登录
-    isLogin: false,
+    // isLogin: false,
     // 当前播放音乐的索引
     currentIndex: -1,
     // 音乐详情卡片的显隐
@@ -109,11 +109,15 @@ const state = {
     ],
     mvUrl:"",
     // 登录后用户信息
-    isLogin:false,
-    user:{
-        userPic:"",
-        userName:""
+    // isLogin:false,
+    // isLogin:false|| localStorage.getItem('isLogin'),
+    isLogin:false|| sessionStorage.getItem('isLogin'),
 
+    user:{
+        userPic:""||sessionStorage.getItem('userPic'),
+        userName:""||sessionStorage.getItem('userName'),
+        // userPic:'' || localStorage.getItem('userPic'),
+        // userName:'' || localStorage.getItem('userName')
     }
 };
 
@@ -133,32 +137,41 @@ const store = new Vuex.Store({
             console.log('changePlayState');
         },
     /********************************************************/
-    //获取当前播放歌曲的信息
-    setContent(state, payload) {
-        state.playContent = payload
-        // state.playList.indexOf(payload)==-1?state.playList.push(payload):""//改变播放列表
-    },
-   
-    //从播放列表中移除歌曲
-    removeSong(state, payload) {
-        let index = state.playList.indexOf(payload)
-        state.playList.splice(index, 1)
-    },
-    //往播放列表中加入歌曲
-    addSong(state, payload) {
-        let index = state.playList.indexOf(payload)
-        state.playList.indexOf(payload)==-1?state.playList.push(payload):""
-    },
+    
+        //获取当前播放歌曲的信息
+        setContent(state, payload) {
+            state.playContent = payload
+            // state.playList.indexOf(payload)==-1?state.playList.push(payload):""//改变播放列表
+        },
+    
+        //从播放列表中移除歌曲
+        removeSong(state, payload) {
+            let index = state.playList.indexOf(payload)
+            state.playList.splice(index, 1)
+        },
+        //往播放列表中加入歌曲
+        addSong(state, payload) {
+            let index = state.playList.indexOf(payload)
+            state.playList.indexOf(payload)==-1?state.playList.push(payload):""
+        },
+        //用户登录状态修改
+        changeIsLogin:(state,isLogin)=>{
+                state.isLogin=isLogin.isLogin;
+                // localStorage.setItem('isLogin', isLogin.isLogin);
+            sessionStorage.setItem('isLogin', isLogin.isLogin);
 
-    changeIsLogin(state,isLogin){
-            state.isLogin=isLogin.isLogin;
-    },
-        changeUser(state,user){
-            
-            state.user.userPic=user.user.userPic;
-            state.user.userName=user.user.userName;
 
         },
+        changeUser:(state,user)=>{
+                state.user.userPic=user.user.userPic;
+                state.user.userName=user.user.userName;
+                // 把登录的用户的名保存到localStorage中，防止页面刷新，导致vuex重新启动，用户名就成为初始值（初始值为空）的情况
+                // localStorage.setItem('userPic', user.user.userPic);
+                // localStorage.setItem('userName', user.user.userName);
+                sessionStorage.setItem('userPic', user.user.userPic);
+                sessionStorage.setItem('userName', user.user.userName);
+
+            },
         boFangMV(state,mvUrl){
             state.mvUrl=mvUrl.mvUrl;
         },

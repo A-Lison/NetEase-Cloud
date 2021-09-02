@@ -10,7 +10,7 @@
           :key="index"
           @click="boFang(item)"
         >
-          <div><img :src="item.picUrl" alt="" /></div>
+          <div><img :src="item.picUrl" alt="" width="100%" /></div>
 
           <h1>{{ item.song }}-{{ item.singer }}</h1>
         </div>
@@ -101,6 +101,10 @@ export default {
 </script>
 
 <style scoped>
+.song h1 {
+  font-size: 14px;
+  font-weight: 400;
+}
 .songlist {
   width: 100%;
   height: auto;

@@ -20,6 +20,12 @@ import singIn from "./header/singIn.vue";
 import login from "./header/login/login.vue";
 export default {
   name: "topNav",
+  components: {
+    findMusic,
+    searchMusic,
+    singIn,
+    login,
+  },
   data() {
     return {
       niName: "未登录",
@@ -27,18 +33,18 @@ export default {
       userPic: require("assets/img/sign.jpg"),
     };
   },
+  created() {
+    this.niName = this.$store.state.user.userName || "未登录";
+    this.userPic =
+      this.$store.state.user.userPic || require("assets/img/sign.jpg");
+  },
   watch: {
     "$store.state.isLogin"() {
       this.niName = this.$store.state.user.userName;
       this.userPic = this.$store.state.user.userPic;
     },
   },
-  components: {
-    findMusic,
-    searchMusic,
-    singIn,
-    login,
-  },
+
   methods: {
     test() {
       console.log(this.$store.state.user.userPic);

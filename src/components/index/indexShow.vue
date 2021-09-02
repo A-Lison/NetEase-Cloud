@@ -1,5 +1,5 @@
 <template >
-  <div class="body">
+  <div class="body" v-if="isShow">
     <div class="container">
       <video
         src="~assets/vedio/indexVideo.mp4"
@@ -35,7 +35,8 @@
           ></span>
         </div>
       </div>
-      <div class="enter" @click="$emit('update:isShow', false)">
+      <!-- <div class="enter" @click="$emit('update:isShow', false)"> -->
+      <div class="enter" @click="click">
         <img
           class="enterlogo"
           src="~assets/img/enter.png"
@@ -51,21 +52,27 @@
 <script>
 export default {
   name: "indexShow",
-  props: {
-    isShow: Boolean,
+  // props: {
+  //   isShow: Boolean,
+  // },
+  data() {
+    return {
+      isShow: true,
+    };
   },
   methods: {
     click() {
       this.isShow = false;
-      var val = this.isShow;
-
+      // var val = this.isShow;
+      // $emit("update:isShow", false);
+      this.$router.push("/index");
       console.log("this.$parent.isShow:" + this.$parent.isShow);
     },
   },
-  destroyed() {
-    this.$router.push("/index");
-    // console.log(123456);
-  },
+  // destroyed() {
+  //   this.$router.push("/index");
+  //   // console.log(123456);
+  // },
 };
 </script>
 

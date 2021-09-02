@@ -31,6 +31,7 @@
           style="width: 100%"
           highlight-current-row
           @current-change="handleCurrentChange"
+          @row-contextmenu="delListSongs"
         >
           <el-table-column prop="playSong" label="歌曲" width="270px">
           </el-table-column>
@@ -50,6 +51,7 @@ export default {
     return {
       currentRow: null,
       drawer: false,
+
       tableData: [
         {
           playId: 0,
@@ -68,6 +70,7 @@ export default {
         playPicUrl: this.$store.state.playPicUrl,
         playSong: this.$store.state.playSong,
         playSinger: this.$store.state.playSinger,
+        delListSong: "x",
       };
       if (this.tableData[0].playPicUrl === "") {
         this.tableData.splice(0, 1, playObj);
@@ -95,11 +98,19 @@ export default {
   },
   methods: {
     test() {
-      console.log("mkl");
+      alert("mkl");
     },
     setCurrent(row) {
       // console.log("musicId；" + songId);
       this.$refs.singleTable.setCurrentRow(row);
+    },
+    //右击删除播放列表歌曲
+    delListSongs(val) {
+      var index = this.tableData.findIndex(
+        (item) => item.playId === val.playId
+      );
+      this.tableData.splice(index, 1);
+      // alert(123);
     },
     // 提交播放列表
     // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性

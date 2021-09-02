@@ -305,14 +305,15 @@ export default {
               };
               const user = {};
               Object.assign(user, table);
+              localStorage.setItem("token", res.data.token);
               this.$store.commit({
                 type: "changeUser",
                 user,
               });
+              alert("登录成功" + this.$store.state.isLogin);
+              console.log(res);
+              this.$router.push("/index/discover");
             }
-            alert("登录成功" + this.$store.state.isLogin);
-            console.log(res);
-            this.$router.push("/discover");
           })
           .catch((err) => {
             console.log(err);

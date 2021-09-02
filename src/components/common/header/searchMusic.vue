@@ -32,11 +32,20 @@ export default {
       songCnt: 0,
     };
   },
-
+  // created() {
+  //   this.changeInfo();
+  // },
   methods: {
+    //输入关键词,点击搜索
     changeInfo() {
       var keyword = this.state;
       // 搜索单曲
+      this.searchDanqu(keyword);
+      // 搜索MV
+      this.searchMV(keyword);
+    },
+    //搜索单曲
+    searchDanqu(keyword) {
       axios({
         url: "/cloudsearch",
         params: {
@@ -58,7 +67,7 @@ export default {
               time: this.formatDt(res.data.result.songs[index].dt),
             };
             // console.log("table.time： " + table.time);
-            // 全局提交搜索结果
+            // 全局提交搜索结果 Object.assign为ES6语法
             const musicList = {};
             Object.assign(musicList, table);
             this.$store.commit({
@@ -71,13 +80,16 @@ export default {
             type: "searchCnt",
             songCnt,
           });
+          //提交完之后路由跳转，展示搜索单曲结果
           this.$router.push("/searchSongList");
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
-      // 搜索MV
+    },
+    // 搜索MV
+    searchMV(keyword) {
       axios({
         url: "/cloudsearch",
         params: {
