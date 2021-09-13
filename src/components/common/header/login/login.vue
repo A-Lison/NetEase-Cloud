@@ -171,6 +171,10 @@ export default {
   //       //   return flag;
   //     },
   //   },
+  //清除定时器
+  destroyed() {
+    clearTimeout(this.timer);
+  },
   methods: {
     // 验证输入的验证码
     checkCaptcha() {
@@ -213,9 +217,13 @@ export default {
       axios({
         url: "/cellphone/existence/check",
         params: {
-          phone: 17344538056,
+          phone: this.phone,
         },
       })
+        // axios
+        //   .post("/cellphone/existence/check", {
+        //     phone: this.phone,
+        //   })
         .then((res) => {
           if (res.data.hasPassword === false) {
             this.isCreated = -1;
@@ -247,23 +255,26 @@ export default {
       } else if (this.isCreated === 1) {
         alert("账号已存在,请登录");
       } else {
-        // axios
-        //   .post("/register/cellphone", {
-        //     phone: this.phone,
-        //     password: this.password,
-        //     captcha: this.captcha,
-        //     nickname: this.nickname,
-        //   })
-        axios({
-          url: "/register/cellphone",
-          params: {
+        axios
+          .post("/register/cellphone", {
             phone: this.phone,
             password: this.password,
             captcha: this.captcha,
             nickname: this.nickname,
-          },
-        })
+          })
+          // axios({
+          //   url: "/register/cellphone",
+          //   params: {
+          //     phone: this.phone,
+          //     password: this.password,
+          //     captcha: this.captcha,
+          //     nickname: this.nickname,
+          //   },
+          // })
           .then((res) => {
+            if (res.data.message === "昵称不符合规范") {
+              alert("昵称不符合规范");
+            }
             if (!res.data.account.id) {
               alert("注册成功,请登录");
             }
@@ -275,10 +286,73 @@ export default {
           });
       }
     },
+    timer() {
+      return setTimeout(() => {
+        this.logining();
+      }, 3000);
+    },
     // 登录
     login() {
       if (this.phone === "" || this.password === "") {
         alert("请输入账号/密码");
+      } else {
+        this.checkCreated();
+        this.timer();
+        // console.log(this.isCreated);
+        // if (this.isCreated === -1) {
+        //   alert("账号不存在，请注册");
+        // } else {
+        // axios({
+        //   url: "/login/cellphone",
+        //   params: {
+        //     phone: this.phone,
+        //     password: this.password,
+        //   },
+        // })
+        //   // axios
+        //   //   .post("/login/cellphone", {
+        //   //     phone: this.phone,
+        //   //     password: this.password,
+        //   //   })
+        //   .then((res) => {
+        //     console.log(res);
+        //     if (res.data.code === 400) {
+        //       alert("账号未存在");
+        //     } else if (res.data.msg === "密码错误") {
+        //       alert("密码错误");
+        //     } else {
+        //       //   this.$store.state.user.userPic = res.data.profile.avatarUrl;
+        //       var isLogin = !this.$store.state.isLogin;
+        //       this.$store.commit({
+        //         type: "changeIsLogin",
+        //         isLogin,
+        //       });
+        //       var table = {
+        //         userPic: res.data.profile.avatarUrl,
+        //         userName: res.data.profile.nickname,
+        //       };
+        //       const user = {};
+        //       Object.assign(user, table);
+        //       localStorage.setItem("token", res.data.token);
+        //       this.$store.commit({
+        //         type: "changeUser",
+        //         user,
+        //       });
+        //       alert("登录成功");
+        //       console.log(res);
+        //       // this.$router.push("/index/discover");
+        //       this.$router.go(-1);
+        //     }
+        //   })
+        //   .catch((err) => {
+        //     console.log(err);
+        //   });
+        // }
+      }
+    },
+    logining() {
+      if (this.isCreated === -1) {
+        alert("账号不存在，请注册");
       } else {
         axios({
           url: "/login/cellphone",
@@ -287,10 +361,17 @@ export default {
             password: this.password,
           },
         })
+          // axios
+          //   .post("/login/cellphone", {
+          //     phone: this.phone,
+          //     password: this.password,
+          //   })
           .then((res) => {
-            if (res.data.code === 400) {
-              alert("账号未存在");
-            } else if (res.data.msg === "密码错误") {
+            console.log(res);
+            // if (res.data.code === 400) {
+            //   alert("账号未存在");
+            // } else
+            if (res.data.msg === "密码错误") {
               alert("密码错误");
             } else {
               //   this.$store.state.user.userPic = res.data.profile.avatarUrl;
@@ -310,9 +391,10 @@ export default {
                 type: "changeUser",
                 user,
               });
-              alert("登录成功" + this.$store.state.isLogin);
+              alert("登录成功");
               console.log(res);
-              this.$router.push("/index/discover");
+              // this.$router.push("/index/discover");
+              this.$router.go(-1);
             }
           })
           .catch((err) => {
@@ -326,7 +408,6 @@ export default {
       this.isLogin = !this.isLogin;
     },
     // 重置密码
-
     reSetPW() {
       if (this.captcha === "" || this.phone === "" || this.password === "") {
         alert("请完善信息");

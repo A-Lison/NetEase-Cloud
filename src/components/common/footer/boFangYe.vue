@@ -30,13 +30,11 @@
 </template>
 
 <script>
-import jiaoPian from "../views/jiaoPian.vue";
-import lyrics from "../views/lyrics.vue";
-import boFangImg from "../views/boFangImg.vue";
+import lyrics from "../../views/lyrics.vue";
+import boFangImg from "../../views/boFangImg.vue";
 export default {
   name: "boFangYe",
   components: {
-    jiaoPian,
     lyrics,
     boFangImg,
   },

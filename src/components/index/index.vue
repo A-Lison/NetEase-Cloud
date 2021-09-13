@@ -2,6 +2,7 @@
   <div id="index">
     <!-- 顶部导航  -->
     <top-nav></top-nav>
+    <!-- 中间区域 -->
     <el-container>
       <!-- 侧边栏 -->
       <el-aside width="170px">
@@ -28,24 +29,24 @@
           </el-menu-item> -->
           <el-menu-item-group>
             <template slot="title" class="groupTitle">登录后可评论</template>
-            <el-menu-item
+            <!-- <el-menu-item
               v-for="(item, index) in createdMusicList"
               :key="index"
               :index="'/musiclistdetail/' + item.id"
             >
               <i class="iconfont icon-gedan"></i>{{ item.name }}</el-menu-item
-            >
+            > -->
           </el-menu-item-group>
 
           <el-menu-item-group>
             <template slot="title" class="groupTitle"></template>
-            <el-menu-item
+            <!-- <el-menu-item
               v-for="(item, index) in collectedMusicList"
               :key="index"
               :index="'/musiclistdetail/' + item.id"
             >
               <i class="iconfont icon-gedan"></i>{{ item.name }}</el-menu-item
-            >
+            > -->
           </el-menu-item-group>
         </el-menu>
       </el-aside>
@@ -70,9 +71,9 @@
 
 <script>
 import test from "../common/test.vue";
-import topNav from "../common/topNav.vue";
+import topNav from "../common/header/topNav.vue";
 import tabs from "../common/find/tabs.vue";
-import bottomControl from "../footer/bottomControl.vue";
+import bottomControl from "../common/footer/bottomControl.vue";
 import searchSongList from "../common/find/searchSongList.vue";
 export default {
   name: "index",
@@ -86,17 +87,6 @@ export default {
   data() {
     return {
       defaultActive: "",
-      // 用户信息
-      userInfo: {},
-      // 创建的歌单
-      createdMusicList: [],
-      // 收藏的歌单
-      collectedMusicList: [],
-      // 下载的音乐的信息
-      downloadMusicInfo: {
-        name: "",
-        url: "",
-      },
     };
   },
   created() {
@@ -108,35 +98,13 @@ export default {
     }, 500);
   },
   methods: {
-    // 请求
-    // 请求用户歌单
+    // 判断是否已经的登录，未登录则弹窗
     async getUserMusicList() {
       if (!this.$store.state.user.userName) {
         // 说明已经退出登录
         this.$message.error("请先进行登录操作");
         return;
       }
-      // let timestamp = Date.parse(new Date());
-      // // 先从localStorage里面读取用户信息  如果登录成功是有存的
-      // this.userInfo =
-      //   window.localStorage.getItem("userInfo") &&
-      //   JSON.parse(window.localStorage.getItem("userInfo"));
-      // let res = await this.$request("/user/playlist", {
-      //   uid: this.userInfo.userId,
-      //   timestamp,
-      // });
-      // console.log(res);
-      // 对数据进行处理分类
-      // res = res.data.playlist;
-      // let index = res.findIndex((item) => item.subscribed == true);
-      // this.createdMusicList = res.slice(0, index);
-      // this.collectedMusicList = res.slice(index);
-      // this.createdMusicList[0].name = "我喜欢的音乐";
-      // // console.log(this.createdMusicList, this.collectedMusicList);
-      // // 将收藏的歌单上传至vuex
-      // this.$store.commit("updateCollectMusicList", this.collectedMusicList);
-      // // 将创建的歌单上传至vuex
-      // this.$store.commit("updateCreatedMusicList", this.createdMusicList);
     },
   },
   watch: {
@@ -146,42 +114,10 @@ export default {
     //     // this.$router.go(0);
     //   }
     // },
-    // 监听收藏歌单的变化
-    "$store.state.collectMusicList"(current) {
-      this.collectedMusicList = current;
-    },
+
     "$route.path"() {
       // 取路由中的首地址 用于侧边栏的导航active
       this.defaultActive = "/" + this.$route.path.split("/")[1];
-    },
-
-    // 监听当前下载音乐信息
-    "$store.state.downloadMusicInfo"(current) {
-      axios
-        .get(current.url, { responseType: "blob" })
-        .then((res) => {
-          let blob = res.data;
-          let url = URL.createObjectURL(blob);
-          // console.log(url);
-          let a = document.querySelector("#downloadCurrentMusic");
-          this.downloadMusicInfo.url = url;
-          this.downloadMusicInfo.name = current.name;
-          this.$nextTick(() => {
-            a.click();
-            // 用完释放URL对象
-            URL.revokeObjectURL(url);
-          });
-        })
-        .catch((err) => {
-          console.log(err);
-          this.$message.error("下载失败,请稍后重试!");
-        });
-
-      // this.downloadMusicInfo = current;
-      // let a = document.querySelector("#downloadCurrentMusic");
-      // this.$nextTick(() => {
-      //   a.click();
-      // });
     },
   },
 };

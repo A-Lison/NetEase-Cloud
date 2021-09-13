@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import axios from "../../network/axios";
+import axios from "../../../network/axios";
 export default {
   name: "lunBo",
   data() {

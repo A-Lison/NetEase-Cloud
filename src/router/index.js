@@ -19,10 +19,6 @@ const videos = () => import('../components/common/middle/videos')
 const onMv = () => import('../components/common/middle/onMv')
 const login = () => import('../components/common/header/login/login')
 
-
-
-// const Profile = () => import('../views/profile/Profile')
-
 // 1.安装插件
 Vue.use(VueRouter)
 const originalPush = VueRouter.prototype.push

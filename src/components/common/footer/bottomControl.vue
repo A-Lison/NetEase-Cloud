@@ -84,7 +84,7 @@
 </template>
 
 <script>
-import axios from "../../network/axios";
+import axios from "../../../network/axios";
 import boFangList from "./boFangList.vue";
 import boFangYe from "./boFangYe.vue";
 let lastSecond = 0;
@@ -106,11 +106,11 @@ export default {
       listShow: false, //控制播放列表的显示
       loopStyle: "not", //not:单曲播放 list:列表循环 single:单曲循环 random:随机循环
       drawer: false, //弹出播放页面
-      playURL: this.$store.state.songId,
-      picUrl: require("assets/img/kexie.jpg"),
-      songName: this.$store.state.playSong,
-      singer: this.$store.state.playSinger,
-      title: this.$store.state.playSong,
+      playURL: this.$store.state.songId, //当前播放歌曲的URL
+      picUrl: require("assets/img/kexie.jpg"), //当前播放歌曲的图片
+      songName: this.$store.state.playSong, //当前播放歌曲
+      singer: this.$store.state.playSinger, //当前播放歌曲的歌手
+      title: this.$store.state.playSong, //当前播放歌曲
       // 当前播放时间位置
       currentTime: 0,
       // 进度条的位置
@@ -134,6 +134,7 @@ export default {
       }
       return c;
     },
+    //获取当前在播放列表中的歌曲索引
     playIndex() {
       return this.$store.state.playList[0].playDetail.findIndex(
         (item) => item.playId === this.$store.state.playId
@@ -158,6 +159,9 @@ export default {
       this.$store.state.onPlay = !this.$store.state.onPlay;
       this.playStatus = true;
     },
+    "$store.state.isDel"() {
+      this.next();
+    },
     //监听路由是否在播放视频,播放视频时暂停播放歌曲
     $route() {
       if (this.$route.name === "onMv") {
@@ -178,6 +182,7 @@ export default {
       // })
       // this.$store.state.onPlay = false;
       this.playStatus = false;
+      this.next();
     },
 
     // 获取歌曲URL
@@ -187,35 +192,38 @@ export default {
     },
     //播放上一首歌
     prev() {
-      let t = this.playIndex - 1;
-
-      this.$store.state.playSinger =
-        this.$store.state.playList[0].playDetail[t].playSinger;
-      this.$store.state.playId =
-        this.$store.state.playList[0].playDetail[t].playId;
-      this.$store.state.playSong =
-        this.$store.state.playList[0].playDetail[t].playSong;
-      this.$store.state.playPicUrl =
-        this.$store.state.playList[0].playDetail[t].playPicUrl;
-      this.getSongUrl(this.$store.state.playId);
-
+      let t = 0;
+      this.playIndex - 1 == -1
+        ? (t = this.$store.state.playList[0].playDetail.length - 1)
+        : (t = this.playIndex - 1);
+      this.playIndexSong(t);
       console.log(this.playIndex);
       console.log(this.$store.state.playList[0].playDetail[t].playSinger);
       console.log(this.$store.state.playSinger);
     },
     //播放下一首歌
     next() {
-      let f = this.playIndex + 1;
+      // alert(123);
+      let f = 0;
+      //判断是否为最后一首歌
+      this.playIndex + 1 == this.$store.state.playList[0].playDetail.length
+        ? (f = 0)
+        : (f = this.playIndex + 1);
+      this.playIndexSong(f);
+      // console.log(this.playCnt);
+      // alert(this.$store.state.playList[0].playDetail.length);
+    },
+    //当前播放歌曲信息
+    playIndexSong(val) {
       this.$store.state.playSinger =
-        this.$store.state.playList[0].playDetail[f].playSinger;
+        this.$store.state.playList[0].playDetail[val].playSinger;
       this.$store.state.playId =
-        this.$store.state.playList[0].playDetail[f].playId;
+        this.$store.state.playList[0].playDetail[val].playId;
       this.$store.state.playSong =
-        this.$store.state.playList[0].playDetail[f].playSong;
+        this.$store.state.playList[0].playDetail[val].playSong;
       this.$store.state.playPicUrl =
-        this.$store.state.playList[0].playDetail[f].playPicUrl;
+        this.$store.state.playList[0].playDetail[val].playPicUrl;
       this.getSongUrl(this.$store.state.playId);
-      console.log(this.playCnt);
     },
     // 当前播放时间位置
     timeupdate() {
@@ -227,7 +235,7 @@ export default {
       //   "this.$store.state.currentTime:" + this.$store.state.currentTime
       // );
 
-      time = Math.floor(time);
+      time = Math.floor(time); //Math.floor() 返回小于或等于一个给定数字的最大整数。
       if (time !== lastSecond) {
         // console.log(time);
         lastSecond = time;
@@ -256,13 +264,16 @@ export default {
     },
     //清除定时器
     clearTimer() {
+      //clearInterval() 方法可取消由 setInterval() 设置的 timeout。
+      // clearInterval() 方法的参数必须是由 setInterval() 返回的 ID 值。
       clearInterval(this.Timer);
       this.Timer = "";
     },
     // 处理音乐时间
     returnSecond(time) {
+      // split()方法用于把一个字符串分割成字符串数组，并返回。语法“string.split(separator,limit)”，其中separator参数指定分割字符串的位置，如果值为空字符串 ("") ，则字符串每个字符之间都会被分割。
       time = time.split(":");
-      let m = parseInt(time[0]);
+      let m = parseInt(time[0]); //parseInt() 函数可解析一个字符串，并返回一个整数。
       let s = parseInt(time[1]);
       return m * 60 + s;
     },
@@ -296,36 +307,7 @@ export default {
         ? this.play()
         : this.$store.commit("setContent", obj);
     },
-    //单曲播放
-    notLoop() {
-      this.playStatus = false;
-      this.clearTimer();
-    },
-    //列表循环
-    listLoop() {
-      let index = this.playList.indexOf(this.songContent);
-      let length = this.playList.length;
-      index == length - 1 ? (index = 0) : index++; //如果是最后一首，就从头再来
-      this.$store.commit("setContent", this.playList[index]); //更新store
-    },
-    //单曲循环
-    singleLoop() {
-      this.play(); //单曲循环可以直接调用我们前面的play()
-    },
-
-    //上一首
-    prevSong() {
-      let index = this.playList.indexOf(this.songContent);
-      let length = this.playList.length;
-      index == 0 ? (index = length - 1) : index--;
-      this.$store.commit("setContent", this.playList[index]);
-    },
-    //下一首
-    nextSong() {
-      //点击下一首时，主要判断当前循环方式是不是随机，如果不是可以直接调用列表循环方式切换
-      this.loopStyle == "random" ? this.randomLoop() : this.listLoop();
-    },
-    // 获取1歌曲播放时长
+    // 获取歌曲播放时长
     getDuration() {
       this.durationText = this.formatTime(this.$refs.audio.duration);
     },

@@ -1,38 +1,50 @@
 <template>
-  <div class="comments">
-    <h1 class="mus-tit">{{ song }}-{{ singer }}</h1>
-    <!-- 热评 -->
-    <div class="comlei">网易云热评墙</div>
-    <div class="retext text">
-      <div class="com" v-for="(item, index) in recomments" :key="index">
-        <div class="touxiang"><img :src="item.userPic" alt="" /></div>
-        <div class="user">
-          <div class="userName">{{ item.user }}:</div>
-          <div class="con">{{ item.content }}</div>
-        </div>
-      </div>
+  <div>
+    <div class="miao">
+      <a href="#reping">-网易云热评墙-</a>
+      <!-- <img
+        src="https://qn.res.netease.com/pc/gw/20200904095222/img/split_84314503.webp"
+        alt=""
+      /> -->
+      <a href="#xinping">-最新评论墙-</a>
     </div>
-    <!-- 最新评论 -->
-    <div class="comlei">最新评论</div>
-    <div class="lasttext text">
-      <div class="com" v-for="(item, index) in comments" :key="index">
-        <div class="touxiang" @click="deleteComment(item)">
-          <img :src="item.userPic" alt="" />
-        </div>
-        <div class="user">
-          <div class="userName">{{ item.user }}:</div>
-          <div class="con">{{ item.content }}</div>
-        </div>
-      </div>
-    </div>
-    <div class="content-box">
-      <el-button type="text" @click="openDel" v-show="isDel">
-        <div class="del">删除评论</div>
-      </el-button>
+    <div class="comments">
+      <h1 class="mus-tit">{{ song }}-{{ singer }}</h1>
+      <!-- 热评 -->
+      <a id="reping"><div class="comlei">网易云热评墙</div></a>
 
-      <el-button type="text" @click="open"
-        ><i class="el-icon-edit writeicon"></i>写评论</el-button
-      >
+      <div class="retext text">
+        <div class="com" v-for="(item, index) in recomments" :key="index">
+          <div class="touxiang"><img :src="item.userPic" alt="" /></div>
+          <div class="user">
+            <div class="userName">{{ item.user }}:</div>
+            <div class="con">{{ item.content }}</div>
+          </div>
+        </div>
+      </div>
+      <!-- 最新评论 -->
+      <a id="xinping"><div class="comlei">最新评论墙</div></a>
+
+      <div class="lasttext text">
+        <div class="com" v-for="(item, index) in comments" :key="index">
+          <div class="touxiang" @click="deleteComment(item)">
+            <img :src="item.userPic" alt="" />
+          </div>
+          <div class="user">
+            <div class="userName">{{ item.user }}:</div>
+            <div class="con">{{ item.content }}</div>
+          </div>
+        </div>
+      </div>
+      <div class="content-box">
+        <el-button type="text" @click="openDel" v-show="isDel">
+          <div class="del">删除评论</div>
+        </el-button>
+
+        <el-button type="text" @click="open"
+          ><i class="el-icon-edit writeicon"></i>写评论</el-button
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +55,7 @@ export default {
   name: "comments",
   data() {
     return {
+      flag: false,
       isDel: false,
       song: this.$store.state.playSong,
       singer: this.$store.state.playSinger,
@@ -66,7 +79,13 @@ export default {
     };
   },
   watch: {
+    // flag() {
+    //   console.log("testcomment");
+    //   // this.getNewComments();
+    //   this.timer();
+    // },
     "$store.state.playSong"() {
+      //更新热评
       axios({
         url: "/comment/hot",
         params: {
@@ -89,32 +108,12 @@ export default {
         .catch((err) => {
           console.log(err);
         });
-
-      axios({
-        url: "/comment/music",
-        params: {
-          id: this.$store.state.playId,
-          limit: 100,
-        },
-      })
-        .then((res) => {
-          for (let index = 0; res.data.comments[index]; index++) {
-            // console.log("index；" + index);
-            this.$set(this.comments, index, {
-              userPic: res.data.comments[index].user.avatarUrl,
-              user: res.data.comments[index].user.nickname,
-              content: res.data.comments[index].content,
-              commentId: res.data.comments[index].commentId,
-            });
-          }
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      // 获取最新评论
+      this.getNewComments();
     },
   },
   created() {
+    //判断是否有播放歌曲
     if (this.$store.state.playSong === "") {
       alert("请选择歌曲播放");
       this.$router.push("/index/discover");
@@ -144,33 +143,19 @@ export default {
           console.log(err);
         });
       // 获取最新评论
-      axios({
-        url: "/comment/music",
-        params: {
-          id: this.$store.state.playId,
-          limit: 100,
-        },
-      })
-        .then((res) => {
-          for (let index = 0; res.data.comments[index]; index++) {
-            // console.log("index；" + index);
-            this.$set(this.comments, index, {
-              userPic: res.data.comments[index].user.avatarUrl,
-              user: res.data.comments[index].user.nickname,
-              content: res.data.comments[index].content,
-              commentId: res.data.comments[index].commentId,
-            });
-          }
-          console.log(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      this.getNewComments();
     }
+  },
+  //清除定时器
+  destroyed() {
+    clearTimeout(this.timer);
   },
   // 弹框部分
   methods: {
+    //获取最新评论
     getNewComments() {
+      // alert("test");
+      // 获取最新评论
       axios({
         url: "/comment/music",
         params: {
@@ -179,6 +164,7 @@ export default {
         },
       })
         .then((res) => {
+          //渲染评论
           for (let index = 0; res.data.comments[index]; index++) {
             // console.log("index；" + index);
             this.$set(this.comments, index, {
@@ -188,14 +174,27 @@ export default {
               commentId: res.data.comments[index].commentId,
             });
           }
+          // this.comments = res.data.comments;
+          console.log("更新评论");
           console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
+      // return;
     },
+    // 定时器
+    timer() {
+      return setTimeout(() => {
+        this.getNewComments();
+      }, 10000);
+    },
+    //打开评论框
     open() {
-      if (this.$store.state.user.userPic === "") {
+      // alert(this.$store.state.user.userPic + "123");
+      // console.log("评论前的this.comments");
+      // console.log(this.comments);
+      if (this.$store.state.user.userPic === null) {
         alert("请先登录");
       } else {
         this.$prompt("音乐始于故事", "", {
@@ -207,6 +206,13 @@ export default {
         })
           .then(({ value }) => {
             console.log(123);
+            // axios
+            //   .post("/comment", {
+            //     t: 1,
+            //     type: 0,
+            //     id: this.$store.state.playId,
+            //     content: value,
+            //   })
             axios({
               url: "/comment",
               params: {
@@ -217,18 +223,37 @@ export default {
               },
             })
               .then((res) => {
-                // console.log("评论  " + res);
+                console.log("评论成功");
+                let table = {
+                  userPic: res.data.comment.user.avatarUrl,
+                  user: res.data.comment.user.nickname,
+                  content: res.data.comment.content,
+                  commentId: res.data.comment.commentId,
+                };
+                // this.comments = [table, ...this.comnnents];
+                this.comments.unshift(table);
+                console.log(table);
+                console.log(this.comments);
+                console.log(res);
+                // 获取评论后刷新最新的评论
+                // this.getNewComments();
+                // this.timer();
                 // this.$router.push("/comments");
               })
               .catch((err) => {
                 console.log(err);
               });
+            this.flag = !this.flag;
+
             this.$message({
               type: "success",
-              message: "评论成功，刷新后即可显示评论内容",
+              message: "评论成功",
             });
-            // 获取评论后刷新最新的评论
-            this.getNewComments();
+            // this.timer();
+
+            // console.log("评论后的this.comments");
+            // console.log(this.comments);
+            // window.location.reload(); //页面刷新
           })
           .catch(() => {
             this.$message({
@@ -257,20 +282,21 @@ export default {
             },
           })
             .then((res) => {
-              console.log("删除 " + res);
-
+              console.log("删除评论 ");
+              console.log(res);
+              // 删除评论后刷新最新的评论
+              this.getNewComments();
               // this.$router.push("/comments");
             })
             .catch((err) => {
               console.log(err);
             });
+
           this.$message({
             type: "success",
             message: "删除成功!",
           });
           this.isDel = !this.isDel;
-          // 删除评论后刷新最新的评论
-          this.getNewComments();
         })
         .catch(() => {
           this.$message({
@@ -281,7 +307,8 @@ export default {
         });
     },
     deleteComment(item) {
-      if (item.userPic === this.$store.state.user.userPic) {
+      // console.log(item.userPic + "。。。" + this.$store.state.user.userPic);
+      if (item.user === this.$store.state.user.userName) {
         this.isDel = !this.isDel;
         this.delCommentId = item.commentId;
       }
@@ -291,6 +318,29 @@ export default {
 </script>
 
 <style>
+.miao {
+  position: fixed;
+  overflow: hidden;
+  /* background-color: black; */
+}
+.miao img {
+  width: 30px;
+}
+.miao a {
+  margin-bottom: 5px;
+  display: block;
+
+  width: 100px;
+  height: 25px;
+  padding-top: 5px;
+  border-bottom: 1px solid #fca5a599;
+  font-family: "Microsoft Yahei", "\5FAE\8F6F\96C5\9ED1", Arial, sans-serif;
+}
+.miao a:hover {
+  background-color: rgba(221, 127, 127, 0.466);
+  transition: 0.5s;
+  /* color: #c0c4cc; */
+}
 .del {
   display: block !important;
   position: absolute;
@@ -342,7 +392,7 @@ button.el-button.el-button--text {
   margin-top: 15px;
   color: gray;
   text-align: left;
-  font-size: 18px;
+  font-size: 16px;
 }
 .comments {
   margin: 10px auto;

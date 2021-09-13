@@ -14,10 +14,10 @@
 </template>
 
 <script>
-import findMusic from "./find/discover.vue";
-import searchMusic from "./header/searchMusic.vue";
-import singIn from "./header/singIn.vue";
-import login from "./header/login/login.vue";
+import findMusic from "../find/discover.vue";
+import searchMusic from "./searchMusic.vue";
+import singIn from "./singIn.vue";
+import login from "./login/login.vue";
 export default {
   name: "topNav",
   components: {

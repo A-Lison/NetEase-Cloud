@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import axios from "../../network/axios";
+import axios from "../../../network/axios";
 export default {
   name: "boFangList",
   data() {
@@ -75,33 +75,23 @@ export default {
       if (this.tableData[0].playPicUrl === "") {
         this.tableData.splice(0, 1, playObj);
       }
+      //判断歌曲是否已存在
       if (
         JSON.stringify(this.tableData).indexOf(JSON.stringify(playObj)) == -1
       ) {
         this.tableData.unshift(playObj);
       }
-      // this.tableData.indexOf(playObj) === -1
-      //   ? this.tableData.unshift(playObj)
-      //   : "";
-
-      // for (let index = 0; this.tableData[index]; index++) {
-      //   if (playId === this.tableData[index].playId) {
-      //     cnt++;
-      //     i = index;
-      //   }
-      //   if (cnt > 1) {
-      //     this.tableData.splice(i, 1);
-      //   }
-      // }
-      // this.tableData.includes(playObj) ? this.tableData.unshift(playObj) : "";
+      this.changeList();
     },
+  },
+  created() {
+    this.changeList();
   },
   methods: {
     test() {
       alert("mkl");
     },
     setCurrent(row) {
-      // console.log("musicId；" + songId);
       this.$refs.singleTable.setCurrentRow(row);
     },
     //右击删除播放列表歌曲
@@ -110,9 +100,34 @@ export default {
         (item) => item.playId === val.playId
       );
       this.tableData.splice(index, 1);
+      // this.$store.commit({
+      //   type: "removeSong",
+      //   index,
+      // });
+      if (val.playId === this.$store.state.playId) {
+        let isDel = !this.$store.state.isDel;
+        this.$store.commit({
+          type: "removeSonged",
+          isDel,
+        });
+        console.log("切歌");
+      }
+
+      console.log("成功移除列表歌曲");
+      // this.changeList();//删除后重新提交
       // alert(123);
+      // alert(this.$store.state.playList[0].playDetail.length);
     },
     // 提交播放列表
+    changeList() {
+      this.$store.state.playList.splice(0, 10000);
+      var playDetail = this.tableData;
+      // Object.assign(playDetail, table);
+      this.$store.commit({
+        type: "addSong",
+        playDetail,
+      });
+    },
     // 当表格的当前行发生变化的时候会触发该事件，如果要高亮当前行，请打开表格的 highlight-current-row 属性
     handleCurrentChange(val) {
       this.currentRow = val;
@@ -121,17 +136,7 @@ export default {
         "id=" +
         val.playId +
         ".mp3";
-      // console.log(55555);
-
-      // 改变播放歌曲信息
-      // const table = {
-      //   id: val.playId,
-      //   playPicUrl: val.playPicUrl,
-      //   playSong: val.playSong,
-      //   playSinger: val.playSinger,
-      // };
-      // const playDetail = {};
-      //  this=that;
+      //清除原歌曲列表
       this.$store.state.playList.splice(0, 10000);
       var playDetail = this.tableData;
       // Object.assign(playDetail, table);

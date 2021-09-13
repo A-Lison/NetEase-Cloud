@@ -10,16 +10,21 @@
       <!-- <search-videos></search-videos> -->
       <mikutap></mikutap>
     </el-tab-pane>
+    <!-- <el-tab-pane label="对光绘轴" name="third"> -->
+    <!-- <search-videos></search-videos> -->
+    <!-- <weavesilk></weavesilk> -->
+    <!-- </el-tab-pane> -->
     <!-- <el-tab-pane label="排行榜" name="third">排行榜</el-tab-pane>
     <el-tab-pane label="最新音乐" name="fourth">最新音乐</el-tab-pane> -->
   </el-tabs>
 </template>
 
 <script>
-import lunBo from "../lunBo.vue";
+import lunBo from "./lunBo.vue";
 import tuiJianList from "./tuiJianList.vue";
 import searchVideos from "./searchVideos.vue";
 import mikutap from "./mikutap.vue";
+import weavesilk from "./weavesilk.vue";
 export default {
   name: "tabs",
   components: {
@@ -27,6 +32,7 @@ export default {
     tuiJianList,
     searchVideos,
     mikutap,
+    weavesilk,
   },
   data() {
     return {

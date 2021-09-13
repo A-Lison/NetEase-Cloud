@@ -3,7 +3,9 @@
     <!-- <index-show v-if="isShow" :isShow.sync="isShow"></index-show> -->
     <!-- <index-show v-if="isShow" @change-type="changeIsShow"></index-show> -->
     <router-view></router-view>
-
+    <el-backtop :visibility-height="60">
+      <i class="el-icon-caret-top"></i>
+    </el-backtop>
     <!-- <router-view name="index"></router-view> -->
     <!-- <index></index> -->
     <!-- <button @click="route">跳转</button> -->
@@ -53,7 +55,9 @@ export default {
   width: 0 !important;
   height: 0;
 }
-
+.el-backtop {
+  bottom: 150px !important;
+}
 /* .top,
 .footer {
   background-color: rgb(241, 128, 128);

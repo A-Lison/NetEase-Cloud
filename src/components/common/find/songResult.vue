@@ -18,6 +18,9 @@
       <el-table-column property="zhuanji" label="专辑"> </el-table-column>
       <el-table-column property="time" label="时长"> </el-table-column>
     </el-table>
+    <!-- <el-backtop
+      target=".page-component__scroll .el-scrollbar__wrap"
+    ></el-backtop> -->
   </div>
 </template>
 
@@ -38,6 +41,7 @@ export default {
           time: "",
         },
       ],
+      // loading: true,
       songList: [],
       songCnt: 0,
       currentRow: null,
@@ -134,6 +138,7 @@ export default {
   },
 };
 </script>
+
 
 <style>
 </style>
