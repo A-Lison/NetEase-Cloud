@@ -21,20 +21,15 @@ export default {
   methods: {
     getRequest() {
       axios({
-        url: "/lyric?id=33894312",
-        // params: {
-        //   // keywords: "黄昏",
-        //   // type: 1014,
-        //   id: "FB7EFBDA499A834BD367434940AF3673",
-        //   // limit: 100,
-        //   // id: 190072,
-        // },
-        // url: "/api2/zixun/181654.html",
+        url: "/mv/url",
+        params: {
+          id: "14300290",
+        },
       })
         .then((res) => {
           // console.log(res.data.klyric.lyric);
           console.log(res);
-          this.message = res.data.lrc.lyric;
+          this.message = res;
         })
         .catch((err) => {
           this.message = err;

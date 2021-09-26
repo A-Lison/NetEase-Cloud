@@ -99,14 +99,21 @@ export default {
         },
       })
         .then((res) => {
-          this.$store.state.searchVideos.splice(0, 1000);
-          for (let index = 0; res.data.result.videos[index]; index++) {
+          console.log("vedios:");
+          console.log(res);
+          this.$store.state.searchVideos.splice(0, 10000);
+          for (let index = 1; res.data.result.videos[index]; index++) {
+            var tid = res.data.result.videos[index].vid;
+            // if (index === 0) {
+            //   tid = parseInt(res.data.result.videos[index].vid);
+            //   // alert(tid);
+            // }
             // 获取搜索结果
             const vtable = {
               userName: res.data.result.videos[index].creator[0].userName,
               title: res.data.result.videos[index].title,
               coverUrl: res.data.result.videos[index].coverUrl,
-              vid: res.data.result.videos[index].vid,
+              vid: tid,
             };
             // console.log("table.time： " + table.time);
             // 全局提交搜索结果

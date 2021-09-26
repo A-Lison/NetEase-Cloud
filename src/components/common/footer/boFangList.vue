@@ -157,9 +157,12 @@ export default {
 };
 </script>
 
-<style scoped>
-</style>
+
+
 <style >
+.el-table .cell {
+  height: 25px !important;
+}
 .el-drawer.ltr,
 .el-drawer.rtl,
 .el-drawer__container {

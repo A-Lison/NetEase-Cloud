@@ -45,7 +45,7 @@
             获取验证码
           </button>
 
-          <button class="but button submit" @click="zhuCe">
+          <button class="but button submit" @click="zhuCe" type="primary">
             Create Account
           </button>
           <!-- </form> -->
@@ -89,10 +89,22 @@
               获取验证码
             </button>
           </div>
-          <button class="but button sumbit" @click="login" v-show="isLogin">
+
+          <button
+            class="but button sumbit"
+            @click="login"
+            v-show="isLogin"
+            type="primary"
+          >
             Login
           </button>
-          <button class="but button sumbit" @click="reSetPW" v-show="!isLogin">
+
+          <button
+            class="but button sumbit"
+            @click="reSetPW"
+            v-show="!isLogin"
+            type="primary"
+          >
             确认重置
           </button>
 
@@ -138,6 +150,7 @@ export default {
       isCreated: 0,
       isReSet: false,
       isLogin: true,
+      fullscreenLoading: false,
     };
   },
   //    mounted() {
@@ -176,6 +189,18 @@ export default {
     clearTimeout(this.timer);
   },
   methods: {
+    // 加载状态
+    openFullScreen2() {
+      const loading = this.$loading({
+        lock: true,
+        text: "Loading",
+        spinner: "el-icon-loading",
+        background: "rgba(0, 0, 0, 0.7)",
+      });
+      setTimeout(() => {
+        loading.close();
+      }, 2900);
+    },
     // 验证输入的验证码
     checkCaptcha() {
       axios({
@@ -225,6 +250,8 @@ export default {
         //     phone: this.phone,
         //   })
         .then((res) => {
+          console.log("检测账号是否已存在");
+          console.log(res);
           if (res.data.hasPassword === false) {
             this.isCreated = -1;
             console.log("账号不存在");
@@ -240,19 +267,9 @@ export default {
         });
     },
     //   注册
-    zhuCe() {
-      this.checkCreated();
-      //   console.log("测： " + this.isCreated);
-      if (
-        this.captcha === "" ||
-        this.phone === "" ||
-        this.password === "" ||
-        this.nickname === ""
-      ) {
-        alert("请完善信息");
-      } else if (this.password != this.checkPw) {
-        alert("请确认密码");
-      } else if (this.isCreated === 1) {
+    zhuCeing() {
+      console.log("测： " + this.isCreated);
+      if (this.isCreated === 1) {
         alert("账号已存在,请登录");
       } else {
         axios
@@ -282,14 +299,59 @@ export default {
             console.log(res);
           })
           .catch((err) => {
-            console.log("err:  " + err);
+            console.log(err);
           });
       }
     },
-    timer() {
+    zhuCeTimer() {
       return setTimeout(() => {
-        this.logining();
+        this.zhuCeing();
       }, 3000);
+    },
+    zhuCe() {
+      if (
+        this.captcha === "" ||
+        this.phone === "" ||
+        this.password === "" ||
+        this.nickname === ""
+      ) {
+        alert("请完善信息");
+      } else if (this.password != this.checkPw) {
+        alert("请确认密码");
+      } else {
+        this.checkCreated();
+        this.checkCaptcha();
+        this.openFullScreen2();
+        this.zhuCeTimer();
+      }
+    },
+    //验证验证码
+    checkCaptcha() {
+      // axios({
+      //   url: "/captcha/verify",
+      //   params: {
+      //     phone: this.phone,
+      //     captcha: this.captcha,
+      //   },
+      // })
+      axios
+        .post("/captcha/verify", {
+          phone: this.phone,
+          captcha: this.captcha,
+        })
+        .then((res) => {
+          // if (res.data.msg == "参数错误") {
+          //   alert("验证码错误");
+          // }
+
+          console.log("验证验证码");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log("验证码错误");
+          // alert("验证码错误");
+          console.log(err);
+        });
     },
     // 登录
     login() {
@@ -297,6 +359,7 @@ export default {
         alert("请输入账号/密码");
       } else {
         this.checkCreated();
+        this.openFullScreen2();
         this.timer();
         // console.log(this.isCreated);
         // if (this.isCreated === -1) {
@@ -392,6 +455,7 @@ export default {
                 user,
               });
               alert("登录成功");
+              // Message.error({ message: "登录成功" });
               console.log(res);
               // this.$router.push("/index/discover");
               this.$router.go(-1);
@@ -401,6 +465,11 @@ export default {
             console.log(err);
           });
       }
+    },
+    timer() {
+      return setTimeout(() => {
+        this.logining();
+      }, 3000);
     },
     // 忘记密码
     forgetPW() {
@@ -414,6 +483,7 @@ export default {
       } else if (this.password != this.checkPw) {
         alert("请确认密码");
       } else {
+        this.openFullScreen2();
         axios({
           url: "/register/cellphone",
           params: {
@@ -576,7 +646,7 @@ export default {
   opacity: 0.9;
 }
 
-.but {
+.welcome .but {
   padding: 12px;
   font-family: "Open Sans", sans-serif;
   text-transform: uppercase;
@@ -588,13 +658,13 @@ export default {
   display: block;
 }
 
-.but:hover {
+.welcome .but:hover {
   background: #eac7cc;
   color: #f6f6f6;
   transition: background-color 1s ease-out;
 }
 
-.button {
+.welcome .button {
   margin-top: 3%;
   background: #f6f6f6;
   color: #ce7d88;
@@ -617,17 +687,17 @@ form {
   padding: 12px;
 }
 
-.more-padding .sumbit {
+.welcome .more-padding .sumbit {
   margin-top: 45px;
 }
 
-.sumbit {
+.welcome .sumbit {
   margin-top: 25px;
   padding: 12px;
   border-color: rgb(222, 53, 55);
 }
 
-.sumbit:hover {
+.welcome .sumbit:hover {
   background: #cbc0d3;
   border-color: #bfb1c9;
 }

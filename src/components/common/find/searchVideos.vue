@@ -30,10 +30,11 @@ export default {
           vid: "",
         },
       ],
+      mvid: "",
     };
   },
   watch: {
-    "$store.state.searchMusicList"() {
+    "$store.state.searchVideos"() {
       for (let index = 0; this.$store.state.searchVideos[index]; index++) {
         this.$set(this.videos, index, {
           userName: this.$store.state.searchVideos[index].userName,
@@ -58,7 +59,33 @@ export default {
     // console.log(this.videos[2].vid);
   },
   methods: {
+    boFangMV() {
+      axios({
+        url: "/mv/url",
+        params: {
+          id: this.mvid,
+        },
+      })
+        .then((res) => {
+          var mvUrl = res.data.data.url;
+          this.$store.commit({
+            type: "boFangMV",
+            mvUrl,
+          });
+          // console.log(this.$store.state.searchVideos[index].title);
+          //   console.log(this.$store.state.mvUrl);
+          console.log("提交成功");
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
     boFangVideos(val) {
+      // console.log("res:");
+      // console.log(this.$store.state.searchVideos);
+      // console.log(val.vid);
+      this.mvid = val.vid;
       axios({
         url: "/video/url",
         params: {
@@ -66,18 +93,20 @@ export default {
         },
       })
         .then((res) => {
-          // console.log(res.data.data.url);
           var mvUrl = res.data.urls[0].url;
           this.$store.commit({
             type: "boFangMV",
             mvUrl,
           });
+          // console.log(this.$store.state.searchVideos[index].title);
           //   console.log(this.$store.state.mvUrl);
           console.log("提交成功");
+          console.log(res);
         })
         .catch((err) => {
           console.log(err);
         });
+
       this.$router.push("/onMv");
     },
   },
